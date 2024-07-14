@@ -1,3 +1,10 @@
+name: Generate Gradle Wrapper
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to your main branch
+
 jobs:
   generate-wrapper:
     runs-on: ubuntu-latest
@@ -9,12 +16,25 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11'  # Specify the version of Java you need
-        distribution: 'adopt'  # You can also use 'temurin'
+        java-version: '11'  # Use the appropriate Java version
+        distribution: 'temurin'  # Use 'adopt' or 'temurin'
 
     - name: Download Gradle
       run: |
         wget https://services.gradle.org/distributions/gradle-7.4.2-bin.zip
         unzip gradle-7.4.2-bin.zip
-        cd gradle-7.4.2/bin
-        ./gradle wrapper --gradle-version 7.4.2  # Adjust the version as needed
+        export PATH=$PATH:$PWD/gradle-7.4.2/bin  # Add Gradle to PATH
+
+    - name: Generate Gradle Wrapper
+      run: |
+        gradle wrapper --gradle-version 7.4.2  # Adjust the version as needed
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add gradlew gradlew.bat gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.properties
+        git commit -m "Add Gradle wrapper"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
