@@ -16,18 +16,21 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11'  # Use the appropriate Java version
-        distribution: 'temurin'  # Use 'adopt' or 'temurin'
+        java-version: '11'  # Adjust as needed
+        distribution: 'temurin'  # Use 'temurin' or 'adopt'
 
     - name: Download Gradle
       run: |
-        wget https://services.gradle.org/distributions/gradle-7.4.2-bin.zip
-        unzip gradle-7.4.2-bin.zip
-        export PATH=$PATH:$PWD/gradle-7.4.2/bin  # Add Gradle to PATH
+        curl -O https://services.gradle.org/distributions/gradle-7.4.2-bin.zip
+        unzip -q gradle-7.4.2-bin.zip
+        echo "${{ github.workspace }}/gradle-7.4.2/bin" >> $GITHUB_PATH  # Add Gradle to PATH
+
+    - name: Initialize Gradle Project
+      run: |
+        gradle init --type basic  # Initializes a basic Gradle project
 
     - name: Generate Gradle Wrapper
-      run: |
-        gradle wrapper --gradle-version 7.4.2  # Adjust the version as needed
+      run: gradle wrapper --gradle-version 7.4.2  # Adjust the version as needed
 
     - name: Commit and push changes
       run: |
