@@ -5,6 +5,9 @@ on:
     branches:
       - main  # Adjust this to your main branch
 
+permissions:
+  contents: write  # Allow writing to the repository contents
+
 jobs:
   generate-wrapper:
     runs-on: ubuntu-latest
