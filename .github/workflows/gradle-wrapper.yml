@@ -19,11 +19,10 @@ jobs:
         java-version: '11'  # Adjust as needed
         distribution: 'temurin'  # Use 'temurin' or 'adopt'
 
-    - name: Download Gradle
-      run: |
-        curl -O https://services.gradle.org/distributions/gradle-7.4.2-bin.zip
-        unzip -q gradle-7.4.2-bin.zip
-        echo "${{ github.workspace }}/gradle-7.4.2/bin" >> $GITHUB_PATH  # Add Gradle to PATH
+    - name: Set up Gradle
+      uses: gradle/gradle-build-action@v1
+      with:
+        gradle-version: '7.4.2'  # Adjust the version as needed
 
     - name: Initialize Gradle Project
       run: |
